@@ -18,7 +18,14 @@ export default function AuthRoute() {
                 headerShown: false
             }}
             />
-            <Stack.Screen name='SignUp' component={SignUp} />
+
+            <Stack.Screen
+            name='SignUp'
+            component={SignUp}
+            options={{
+                headerShown: false
+            }}
+            />
         </Stack.Navigator>
     )
 }

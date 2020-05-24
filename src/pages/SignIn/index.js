@@ -6,6 +6,8 @@ import {
     Animated
 } from 'react-native'
 
+import { useNavigation } from '@react-navigation/native'
+
 import logo from '../../assets/Logo2.png'
 
 import {
@@ -28,6 +30,8 @@ export default function SignIn() {
     const [password, setPassword] = useState('')
     const [ position ] = useState(new Animated.Value(1000))
 
+    const navigation = useNavigation()
+
     Animated.timing(position, {
         toValue: 0,
         duration: 700,
@@ -35,11 +39,7 @@ export default function SignIn() {
     }).start()
 
     function handleClick() {
-        Animated.timing(position, {
-            toValue: -1000,
-            duration: 700,
-            useNativeDriver: false
-        }).start()
+        navigation.navigate('SignUp')
     }
 
     const AnimatedContainer = Animated.createAnimatedComponent(KeyboardAvoidingView)
