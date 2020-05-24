@@ -5,7 +5,7 @@ export const GoBackButton = styled.TouchableOpacity`
     justify-content: center;
     align-items: center;
     position: absolute;
-    left: -30px;
+    left: -10px;
     top: 15px;
 `
 

@@ -1,11 +1,27 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useState, useEffect } from 'react'
 import firebase from '../services/firebase'
+import AsyncStorage from '@react-native-community/async-storage'
 
 export const AuthContext = createContext()
 
 export default function AuthProvider({ children }) {
     const [user, setUser] = useState(null)
+    const [authLoading, setAuthLoading] = useState(true)
     const [loading, setLoading] = useState(false)
+
+    useEffect(() => {
+        async function getDataFromStorage() {
+            const authUser = await AsyncStorage.getItem('user_auth')
+
+            if (authUser) {
+                setUser(JSON.parse(authUser))
+            }
+
+            setAuthLoading(false)
+        }
+
+        getDataFromStorage()
+    }, [])
 
     //cadastrar usuário
     async function signUp(name, email, password) {
@@ -27,6 +43,7 @@ export default function AuthProvider({ children }) {
                 }
 
                 setUser(userData)
+                saveDataToStorage(userData)
                 setLoading(false)
             })   
         })
@@ -36,6 +53,7 @@ export default function AuthProvider({ children }) {
         })
     }
 
+    //logar usuário
     async function signIn(email, password) {
         setLoading(true)
 
@@ -52,6 +70,7 @@ export default function AuthProvider({ children }) {
                 }
 
                 setUser(userData)
+                saveDataToStorage(userData)
                 setLoading(false)
            })
         })
@@ -61,14 +80,27 @@ export default function AuthProvider({ children }) {
         })
     }
 
+    async function signOut() {
+        await firebase.auth().signOut()
+        await AsyncStorage.clear().then(() => {
+            setUser(null)
+        })
+    }
+
+    async function saveDataToStorage(data) {
+        await AsyncStorage.setItem('user_auth', JSON.stringify(data))
+    }
+
     return (
         <AuthContext.Provider
         value={{
             signed: !!user,
             user,
             loading,
+            authLoading,
             signUp,
-            signIn
+            signIn,
+            signOut
         }}
         >
              {children}

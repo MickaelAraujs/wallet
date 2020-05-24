@@ -85,7 +85,7 @@ export default function SignUp() {
                     
                     <View style={{
                          alignItems: 'center',
-                         marginTop: 30
+                         marginTop: 10
                     }}>
                         <InputBox>
                             <Label>nome</Label>
