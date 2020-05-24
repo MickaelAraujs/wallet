@@ -2,7 +2,10 @@ import React from 'react'
 import { StatusBar } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 
+import AuthProvider from './src/contexts/auth'
 import Routes from './src/routes'
+
+console.disableYellowBox = true
 
 export default function App() {
   return (
@@ -13,7 +16,9 @@ export default function App() {
       translucent={true}
       />
 
-      <Routes />
+      <AuthProvider>
+        <Routes />
+      </AuthProvider>
     </NavigationContainer>
   )
 }

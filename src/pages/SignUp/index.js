@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { 
     KeyboardAvoidingView,
     TouchableWithoutFeedback,
     Keyboard,
     Animated,
-    View
+    View,
+    ActivityIndicator
 } from 'react-native'
 
 import { useNavigation } from '@react-navigation/native'
@@ -27,11 +28,15 @@ import {
     GoBackText
 } from './styles'
 
-export default function SignUn() {
+import { AuthContext } from '../../contexts/auth'
+
+export default function SignUp() {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [ position ] = useState(new Animated.Value(1000))
+
+    const { signUp, loading } = useContext(AuthContext)
 
     const navigation = useNavigation()
 
@@ -41,24 +46,30 @@ export default function SignUn() {
         useNativeDriver: false
     }).start()
 
-    function handleClick() {
-        Animated.timing(position, {
-            toValue: -1000,
-            duration: 700,
-            useNativeDriver: false
-        }).start()
-    }
+    function handleSignUp() {
+        Keyboard.dismiss()
 
-    const AnimatedContainer = Animated.createAnimatedComponent(KeyboardAvoidingView)
+        signUp(name, email, password)
+        
+        setName('')
+        setEmail('')
+        setPassword('')
+    }
 
     return (
         <TouchableWithoutFeedback
         onPress={() => Keyboard.dismiss()}
         >   
+            <Animated.View
+            style={{
+                marginTop: position,
+                paddingBottom: 10,
+                flex: 1
+            }}
+            >
             <Container>
-                <AnimatedContainer
+                <KeyboardAvoidingView
                 behavior='position'
-                style={{ marginTop: position, paddingBottom: 10 }}
                 >   
                     <GoBackButton
                     onPress={() => navigation.goBack()}
@@ -108,13 +119,18 @@ export default function SignUn() {
                         </InputBox>
 
                         <ButtonGreen
-                        onPress={handleClick}
+                        onPress={handleSignUp}
                         >
-                            <ButtonText>CADASTRAR</ButtonText>
+                            { loading ? (
+                                <ActivityIndicator size={25} color='#F3F3F3' />
+                            ) : (
+                                <ButtonText>CADASTRAR</ButtonText>
+                            ) }
                         </ButtonGreen>
                     </View>
-                </AnimatedContainer>
+                </KeyboardAvoidingView>
             </Container>
+            </Animated.View>
         </TouchableWithoutFeedback>
     )
 }

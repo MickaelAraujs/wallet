@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { 
     KeyboardAvoidingView,
     TouchableWithoutFeedback,
     Keyboard,
-    Animated
+    Animated, 
+    ActivityIndicator 
 } from 'react-native'
 
 import { useNavigation } from '@react-navigation/native'
@@ -25,10 +26,14 @@ import {
     SignUpText
 } from './styles'
 
+import { AuthContext } from '../../contexts/auth'
+
 export default function SignIn() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [ position ] = useState(new Animated.Value(1000))
+
+    const { signIn, loading } = useContext(AuthContext)
 
     const navigation = useNavigation()
 
@@ -38,20 +43,28 @@ export default function SignIn() {
         useNativeDriver: false
     }).start()
 
-    function handleClick() {
-        navigation.navigate('SignUp')
-    }
+    function handleSignIn() {
+        Keyboard.dismiss()
 
-    const AnimatedContainer = Animated.createAnimatedComponent(KeyboardAvoidingView)
+        signIn(email, password)
+
+        setEmail('')
+        setPassword('')
+    }
 
     return (
         <TouchableWithoutFeedback
         onPress={() => Keyboard.dismiss()}
         >
+            <Animated.View 
+            style={{
+                flex: 1,
+                marginTop: position,
+            }}
+            >
             <Container>
-                <AnimatedContainer
-                behavior='position'
-                style={{ marginTop: position, paddingBottom: 10 }}
+                <KeyboardAvoidingView
+                behavior='position' 
                 >
                     <LogoAuth
                     source={logo}
@@ -80,21 +93,26 @@ export default function SignIn() {
                         </InputBox>
 
                         <ButtonGreen
-                        onPress={handleClick}
+                        onPress={handleSignIn}
                         >
-                            <ButtonText>ENTRAR</ButtonText>
+                            { loading ? (
+                                <ActivityIndicator size={25} color='#F3F3F3' />
+                            ) : (
+                                <ButtonText>ENTRAR</ButtonText>
+                            )}
                         </ButtonGreen>
                     </SignInContainer>
                     
                     <SignUpText>ainda não possui uma conta?</SignUpText>
 
                     <ButtonGreen
-                    onPress={handleClick}
+                    onPress={() => navigation.navigate('SignUp')}
                     >
                         <ButtonText>CADASTRE-SE</ButtonText>
                     </ButtonGreen>
-                </AnimatedContainer>
+                </KeyboardAvoidingView>
             </Container>
+            </Animated.View>
         </TouchableWithoutFeedback>
     )
 }
