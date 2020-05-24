@@ -11,7 +11,13 @@ export default function AuthRoute() {
         <Stack.Navigator
         initialRouteName='SignIn'
         >
-            <Stack.Screen name='SignIn' component={SignIn} />
+            <Stack.Screen
+            name='SignIn'
+            component={SignIn}
+            options={{
+                headerShown: false
+            }}
+            />
             <Stack.Screen name='SignUp' component={SignUp} />
         </Stack.Navigator>
     )
