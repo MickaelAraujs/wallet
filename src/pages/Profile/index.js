@@ -2,12 +2,11 @@ import React, { useContext } from 'react'
 import { Image } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
-import { Container, ButtonGreen, ButtonText } from '../../styles/global'
+import { Container, ButtonGreen, ButtonText, Actions } from '../../styles/global'
 import {
     ProfileContainer,
     Name,
     Email,
-    Actions,
     SignOutButton
 } from './styles'
 

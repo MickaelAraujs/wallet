@@ -24,8 +24,10 @@ export const Label = styled.Text`
     font-family: 'Roboto-Regular';
 `
 
-export const Input = styled.TextInput`
-    width: 288px;
+export const Input = styled.TextInput.attrs({
+    placeholderTextColor: 'rgba(0,0,0,0.25)'
+})`
+    width: ${props => props.size || 288}px;
     height: 53px;
     background-color: #E2DFDF;
     border-radius: 5px;
@@ -35,7 +37,7 @@ export const Input = styled.TextInput`
 `
 
 export const ButtonGreen = styled.TouchableOpacity`
-    width: 288px;
+    width: ${props => props.size || 288}px;
     height: 53px;
     background-color: #0BB24E;
     border-radius: 5px;
@@ -50,4 +52,8 @@ export const ButtonText = styled.Text`
     font-size: 18px;
     font-family: 'Ranchers-Regular';
     letter-spacing: 3px;
+`
+
+export const Actions = styled.View`
+    margin-top: 25px;
 `

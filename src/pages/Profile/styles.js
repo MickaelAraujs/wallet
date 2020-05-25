@@ -18,10 +18,6 @@ export const Email = styled.Text`
     font-size: 18px;
 `
 
-export const Actions = styled.View`
-    margin-top: 45px;
-`
-
 export const SignOutButton = styled.TouchableOpacity`
     width: 288px;
     height: 53px;
