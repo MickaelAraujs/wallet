@@ -81,8 +81,11 @@ export default function AuthProvider({ children }) {
     }
 
     async function signOut() {
+        setLoading(true)
+
         await firebase.auth().signOut()
         await AsyncStorage.clear().then(() => {
+            setLoading(false)
             setUser(null)
         })
     }

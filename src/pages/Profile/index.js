@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Image } from 'react-native'
+import { Image, ActivityIndicator } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 import { Container, ButtonGreen, ButtonText, Actions } from '../../styles/global'
@@ -18,7 +18,7 @@ import avatar from '../../assets/AVATAR.png'
 export default function Profile() {
     const navigation = useNavigation()
 
-    const { signOut } = useContext(AuthContext)
+    const { signOut, loading } = useContext(AuthContext)
 
     return (
         <Container>
@@ -43,7 +43,11 @@ export default function Profile() {
                 <SignOutButton
                 onPress={() => signOut()}
                 >
-                    <ButtonText>SAIR DA CONTA</ButtonText>
+                    { loading ? (
+                        <ActivityIndicator size={25} color='#F3F3F3' />
+                    ) : (
+                        <ButtonText>SAIR DA CONTA</ButtonText>
+                    )}
                 </SignOutButton>
             </Actions>
         </Container>
