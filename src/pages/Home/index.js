@@ -21,13 +21,8 @@ export default function Home() {
     const [isMinimized, setIsMinimized] = useState(false)
 
     const [ opacity ] = useState(new Animated.Value(1))
-    const [ height ] = useState(new Animated.Value(100))
+    const [ height ] = useState(new Animated.Value(-170))
     const [ cardOpacity ] = useState(new Animated.Value(1))
-
-    const percentualHeight = height.interpolate({
-        inputRange: [25, 100],
-        outputRange: ['25%', '100%']
-    })
 
     const AnimatedText = Animated.createAnimatedComponent(BalanceValue)
     const AnimatedCard = Animated.createAnimatedComponent(ActivityCard)
@@ -39,12 +34,14 @@ export default function Home() {
         if (!hide) {
             Animated.timing(opacity, {
                 toValue: 0,
-                duration: 400
+                duration: 900,
+                useNativeDriver: true
             }).start()
         } else {
             Animated.timing(opacity, {
                 toValue: 1,
-                duration: 400
+                duration: 900,
+                useNativeDriver: true
             }).start()
         }
     }
@@ -53,25 +50,29 @@ export default function Home() {
         if (!isMinimized) {
             Animated.parallel([
                 Animated.timing(height, {
-                    toValue: 20,
-                    duration: 900
+                    toValue: 30,
+                    duration: 900,
+                    useNativeDriver: true
                 }),
 
                 Animated.timing(cardOpacity, {
                     toValue: 1,
-                    duration: 900
+                    duration: 900,
+                    useNativeDriver: true
                 })
             ]).start()
         } else {
             Animated.parallel([
                 Animated.timing(height, {
-                    toValue: 100,
-                    duration: 900
+                    toValue: -170,
+                    duration: 900,
+                    useNativeDriver: true
                 }),
 
                 Animated.timing(cardOpacity, {
                     toValue: 0,
-                    duration: 900
+                    duration: 900,
+                    useNativeDriver: true
                 })
             ]).start()
         }
@@ -85,6 +86,7 @@ export default function Home() {
 
             <Welcome>
                 <Image
+                style={{ marginTop: 20 }}
                 source={logo}
                 />
 
@@ -111,9 +113,9 @@ export default function Home() {
                     onPress={handleHide}
                     >
                         { hide ? (
-                        <Icon name='eye' size={26} color='#000000' />
+                        <Icon name='eye' size={32} color='#000000' />
                         ) : (
-                        <Icon name='eye-off' size={26} color='#000000' />
+                        <Icon name='eye-off' size={32} color='#000000' />
                         ) }
                     </HideButton>
                 </BalanceContainer>
@@ -143,7 +145,7 @@ export default function Home() {
                 </AnimatedInfo>
 
                 <AnimatedCard
-                style={{ height: percentualHeight }}
+                style={{ transform: [{ translateY: height }] }}
                 >
                     <MinimizeButton
                     onPress={handleAnimation}
@@ -156,6 +158,7 @@ export default function Home() {
                     </MinimizeButton>
 
                     <FlatList
+                    style={{ width: '100%', height: '100%'}}
                     data={[1,2,3,4,5,6,7,8,9,10]}
                     keyExtractor={item => item}
                     renderItem={({ item }) => <Info />}

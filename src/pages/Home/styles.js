@@ -8,12 +8,12 @@ export const Welcome = styled.View`
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    flex-wrap: wrap;
 `
 
 export const TextContainer = styled.View`
     margin-left: 35px;
     margin-top: 10px;
+    margin-right: 10px;
 `
 
 export const WelcomeText = styled.Text`
@@ -50,7 +50,6 @@ export const BalanceContainer = styled.View`
 export const BalanceValue = styled.Text`
     font-family: 'Roboto-Bold';
     font-size: 36px;
-    letter-spacing: 1px;
 `
 
 export const HideButton = styled.TouchableOpacity`
@@ -73,7 +72,7 @@ export const FilterDateButton = styled.TouchableOpacity`
 
 export const GreenText = styled.Text`
     margin-left: 5px;
-    font-size: 18px;
+    font-size: 16px;
     font-family: 'Roboto-Bold';
     color: #0BB24E;
 `
@@ -82,7 +81,6 @@ export const ActivityContainer = styled.View`
     width: 100%;
     flex: 1;
     align-items: center;
-    position: relative;
 `
 
 export const ActivityStatus = styled.View`
@@ -103,20 +101,17 @@ export const StatusText = styled.Text`
 
 export const StatusValue = styled.Text`
     font-family: 'Roboto-BoldItalic';
-    font-size: 40px;
+    font-size: 24px;
     color: ${props => props.value === 'low' ? '#E71A1A' : '#01933B'}
 `
 
 export const ActivityCard = styled.View`
-    position: absolute;
-    bottom: 0; 
-    flex: 1;
     background: #fff;
     width: 95%;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     z-index: 9;
-    elevation: 15
+    elevation: 15; 
 `
 
 export const MinimizeButton = styled.TouchableOpacity`
