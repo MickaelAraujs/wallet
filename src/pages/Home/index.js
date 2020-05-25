@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Image, Animated } from 'react-native'
+import { Image, Animated, FlatList } from 'react-native'
 import Icon from 'react-native-vector-icons/Feather'
 
 import { Container } from '../../styles/global'
@@ -13,6 +13,7 @@ import {
 } from './styles'
 
 import DrawerToggler from '../../components/DrawerToggler'
+import Info from '../../components/Info'
 import logo from '../../assets/Logo1.png'
 
 export default function Home() {
@@ -21,6 +22,7 @@ export default function Home() {
 
     const [ opacity ] = useState(new Animated.Value(1))
     const [ height ] = useState(new Animated.Value(100))
+    const [ cardOpacity ] = useState(new Animated.Value(1))
 
     const percentualHeight = height.interpolate({
         inputRange: [25, 100],
@@ -29,6 +31,7 @@ export default function Home() {
 
     const AnimatedText = Animated.createAnimatedComponent(BalanceValue)
     const AnimatedCard = Animated.createAnimatedComponent(ActivityCard)
+    const AnimatedInfo = Animated.createAnimatedComponent(ActivityStatus)
 
     function handleHide() {
         setHide(!hide)
@@ -48,15 +51,29 @@ export default function Home() {
 
     function handleAnimation() {
         if (!isMinimized) {
-            Animated.timing(height, {
-                toValue: 25,
-                duration: 2000
-            }).start()
+            Animated.parallel([
+                Animated.timing(height, {
+                    toValue: 20,
+                    duration: 900
+                }),
+
+                Animated.timing(cardOpacity, {
+                    toValue: 1,
+                    duration: 900
+                })
+            ]).start()
         } else {
-            Animated.timing(height, {
-                toValue: 100,
-                duration: 2000
-            }).start()
+            Animated.parallel([
+                Animated.timing(height, {
+                    toValue: 100,
+                    duration: 900
+                }),
+
+                Animated.timing(cardOpacity, {
+                    toValue: 0,
+                    duration: 900
+                })
+            ]).start()
         }
 
         setIsMinimized(!isMinimized)
@@ -111,7 +128,7 @@ export default function Home() {
             </GreenTextContainer>
 
             <ActivityContainer>
-                <ActivityStatus>
+                <AnimatedInfo style={{ opacity: cardOpacity }}>
                     <StatusContainer>
                         <StatusText>total gastos:</StatusText>
                         
@@ -123,7 +140,7 @@ export default function Home() {
 
                         <StatusValue>R$ 3267,27</StatusValue>
                     </StatusContainer>
-                </ActivityStatus>
+                </AnimatedInfo>
 
                 <AnimatedCard
                 style={{ height: percentualHeight }}
@@ -137,6 +154,12 @@ export default function Home() {
                             <Icon name='minimize-2' size={26} color='#000000' />
                         ) }
                     </MinimizeButton>
+
+                    <FlatList
+                    data={[1,2,3,4,5,6,7,8,9,10]}
+                    keyExtractor={item => item}
+                    renderItem={({ item }) => <Info />}
+                    />
                 </AnimatedCard>
             </ActivityContainer>
         </Container>
