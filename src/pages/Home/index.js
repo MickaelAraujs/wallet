@@ -17,9 +17,18 @@ import logo from '../../assets/Logo1.png'
 
 export default function Home() {
     const [hide, setHide] = useState(false)
+    const [isMinimized, setIsMinimized] = useState(false)
+
     const [ opacity ] = useState(new Animated.Value(1))
+    const [ height ] = useState(new Animated.Value(100))
+
+    const percentualHeight = height.interpolate({
+        inputRange: [25, 100],
+        outputRange: ['25%', '100%']
+    })
 
     const AnimatedText = Animated.createAnimatedComponent(BalanceValue)
+    const AnimatedCard = Animated.createAnimatedComponent(ActivityCard)
 
     function handleHide() {
         setHide(!hide)
@@ -35,6 +44,22 @@ export default function Home() {
                 duration: 400
             }).start()
         }
+    }
+
+    function handleAnimation() {
+        if (!isMinimized) {
+            Animated.timing(height, {
+                toValue: 25,
+                duration: 2000
+            }).start()
+        } else {
+            Animated.timing(height, {
+                toValue: 100,
+                duration: 2000
+            }).start()
+        }
+
+        setIsMinimized(!isMinimized)
     }
 
     return (
@@ -100,11 +125,19 @@ export default function Home() {
                     </StatusContainer>
                 </ActivityStatus>
 
-                <ActivityCard>
-                    <MinimizeButton>
-                        <Icon name='minimize-2' size={26} color='#000000' />
+                <AnimatedCard
+                style={{ height: percentualHeight }}
+                >
+                    <MinimizeButton
+                    onPress={handleAnimation}
+                    >
+                        { isMinimized ? (
+                            <Icon name='maximize-2' size={26} color='#000000' />
+                        ) : (
+                            <Icon name='minimize-2' size={26} color='#000000' />
+                        ) }
                     </MinimizeButton>
-                </ActivityCard>
+                </AnimatedCard>
             </ActivityContainer>
         </Container>
     )

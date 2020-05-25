@@ -113,11 +113,10 @@ export const ActivityCard = styled.View`
     flex: 1;
     background: #fff;
     width: 95%;
-    height: 100%;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     z-index: 9;
-    /* elevation: 15; */
+    elevation: 15
 `
 
 export const MinimizeButton = styled.TouchableOpacity`
