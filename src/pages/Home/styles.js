@@ -49,7 +49,7 @@ export const BalanceContainer = styled.View`
 
 export const BalanceValue = styled.Text`
     font-family: 'Roboto-Bold';
-    font-size: 36px;
+    font-size: 32px;
 `
 
 export const HideButton = styled.TouchableOpacity`

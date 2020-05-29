@@ -1,7 +1,7 @@
 import styled from 'styled-components/native'
 
 export const DropdownView = styled.View`
-    width: 350px;
+    width: 300px;
     height: 53px;
     background-color: #E2DFDF;
     border-radius: 5px;

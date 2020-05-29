@@ -113,9 +113,9 @@ export default function Home() {
                     onPress={handleHide}
                     >
                         { hide ? (
-                        <Icon name='eye' size={32} color='#000000' />
+                        <Icon name='eye' size={26} color='#000000' />
                         ) : (
-                        <Icon name='eye-off' size={32} color='#000000' />
+                        <Icon name='eye-off' size={26} color='#000000' />
                         ) }
                     </HideButton>
                 </BalanceContainer>

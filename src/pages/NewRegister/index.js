@@ -24,8 +24,7 @@ export default function NewRegister() {
     const [value, setValue] = useState('')
     const [type, setType] = useState(null)
     const [comment, setComment] = useState('')
-
-
+    
     return (
         <TouchableWithoutFeedback
         onPress={() => Keyboard.dismiss()}
@@ -42,7 +41,7 @@ export default function NewRegister() {
                                 <Label>valor</Label>
 
                                 <Input
-                                size={350}
+                                size={300}
                                 placeholder='informe o valor do registro'
                                 autoCorrect={false}
                                 value={value}
@@ -57,7 +56,7 @@ export default function NewRegister() {
                 
                             <Input
                             style={{ marginTop: 20 }}
-                            size={350}
+                            size={300}
                             placeholder='comentário (opcional)'
                             autoCorrect={false}
                             value={comment}
@@ -65,7 +64,7 @@ export default function NewRegister() {
                             />
 
                             <ButtonGreen
-                            size={350}
+                            size={300}
                             >
                                 <ButtonText>REGISTRAR</ButtonText>
                             </ButtonGreen>
