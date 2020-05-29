@@ -6,25 +6,26 @@ import {
     Badge, BadgeText, Value, Date, Comment
 } from './styles'
 
-export default function Info() {
-    const data = {
-        type: 'gasto',
-        value: '120',
-        date: '25/05/2020',
-    }
+export default function Info({ data }) {
     return (
         <InfoContainer>
             <Row>
                 <BadgeContainer>
                     <Badge type={data.type}>
-                        <Icon name='arrow-down' size={18} color='#F3F3F3' />
+                        { data.type === 'gasto' ? (
+                            <Icon name='arrow-down' size={18} color='#F3F3F3' />
+                        ) : (
+                            <Icon name='arrow-up' size={18} color='#F3F3F3' />
+                        )}
                         <BadgeText>{data.type}</BadgeText>
                     </Badge>
 
-                    <Value>R$ 120,00</Value>
+                    <Value>{Intl.NumberFormat('pt-BR', {
+                        style: 'currency', currency: 'BRL' }).format(data.value)
+                    }</Value>
                 </BadgeContainer>
 
-                <Date>25/05/2020</Date>
+                <Date>{data.date}</Date>
             </Row>
 
             <Comment>{data.comment ?? ''}</Comment>

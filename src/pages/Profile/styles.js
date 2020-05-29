@@ -11,6 +11,7 @@ export const Name = styled.Text`
     font-size: 24px;
     margin-top: 15px;
     letter-spacing: 1px;
+    text-transform: uppercase;
 `
 
 export const Email = styled.Text`

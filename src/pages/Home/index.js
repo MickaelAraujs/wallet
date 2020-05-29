@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
-import { Image, Animated, FlatList } from 'react-native'
+import React, { useState, useContext, useEffect } from 'react'
+import { Image, Animated, FlatList, ActivityIndicator } from 'react-native'
 import Icon from 'react-native-vector-icons/Feather'
+import firebase from '../../services/firebase'
+import { format } from 'date-fns'
 
 import { Container } from '../../styles/global'
 import {
@@ -14,6 +16,7 @@ import {
 
 import DrawerToggler from '../../components/DrawerToggler'
 import Info from '../../components/Info'
+import { AuthContext } from '../../contexts/auth'
 import logo from '../../assets/Logo1.png'
 
 export default function Home() {
@@ -23,6 +26,84 @@ export default function Home() {
     const [ opacity ] = useState(new Animated.Value(1))
     const [ height ] = useState(new Animated.Value(-170))
     const [ cardOpacity ] = useState(new Animated.Value(1))
+
+    const [balance, setBalance] = useState(0)
+    const [history, setHistory] = useState([])
+    const [high, setHigh] = useState(0)
+    const [low, setLow] = useState(0)
+    const [isLoading, setIsLoading] = useState(true)
+
+    const { user } = useContext(AuthContext)
+
+    useEffect(() => {
+        async function loadUserData() {
+            await firebase.database().ref('users').child(user.uid).on('value', snapshot => {
+                setBalance(snapshot.val().balance)
+            })
+
+            await firebase.database().ref('history').child(user.uid)
+            .orderByChild('date')
+            .equalTo(format(new Date(), 'dd/MM/yyyy'))
+            .limitToLast(10)
+            .on('value', snapshot => {
+                setHistory([])
+
+                snapshot.forEach(child => {
+                    const { comment, date, type, value } = child.val()
+
+                    const data = {
+                        key: child.key,
+                        comment,
+                        date,
+                        type,
+                        value
+                    }
+
+                    setHistory(oldArray => [...oldArray, data].reverse())
+                })
+            })
+        }
+
+        loadUserData()
+    }, [])
+
+    useEffect(() => {
+        async function loadTotalValues() {
+            await firebase.database().ref('history').child(user.uid)
+            .orderByChild('type')
+            .equalTo('gasto')
+            .once('value', snapshot => {
+                let valueArray = []
+
+                snapshot.forEach(child => {
+                    valueArray.push(child.val().value)
+                })
+
+                const total = valueArray.reduce((current, next) => current + next)
+
+                setLow(total)
+            })
+
+            await firebase.database().ref('history').child(user.uid)
+            .orderByChild('type')
+            .equalTo('ganho')
+            .once('value', snapshot => {
+                let valueArray = []
+
+                snapshot.forEach(child => {
+                    valueArray.push(child.val().value)
+                })
+
+                const total = valueArray.reduce((current, next) => current + next)
+
+                setHigh(total)
+            })
+
+            setIsLoading(false)
+        }
+
+        loadTotalValues()
+    }, [balance])
 
     const AnimatedText = Animated.createAnimatedComponent(BalanceValue)
     const AnimatedCard = Animated.createAnimatedComponent(ActivityCard)
@@ -95,10 +176,17 @@ export default function Home() {
                         Bem Vindo,
                     </WelcomeText>
 
-                    <Name>Mickael!</Name>
+                    <Name>{user.name}!</Name>
                 </TextContainer>
             </Welcome>
 
+            { isLoading ? (
+            <ActivityIndicator
+            style={{ marginTop: 25 }}
+            size={45}
+            color='#0BB24E'
+            />
+            ) : (
             <Balance>
                 <BalanceText>saldo:</BalanceText>
 
@@ -106,7 +194,7 @@ export default function Home() {
                     <AnimatedText
                     style={{ opacity: opacity }}
                     >
-                        R$ 109,855,60
+                        {Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(balance)}
                     </AnimatedText>
 
                     <HideButton
@@ -120,6 +208,7 @@ export default function Home() {
                     </HideButton>
                 </BalanceContainer>
             </Balance>
+            ) }
 
             <GreenTextContainer>
                 <FilterDateButton>
@@ -129,18 +218,35 @@ export default function Home() {
                 <GreenText>últimas movimentações</GreenText>
             </GreenTextContainer>
 
+            { isLoading ? (
+            <ActivityIndicator
+            style={{ marginTop: 45 }}
+            size={45}
+            color='#0BB24E'
+            />
+            ) : (
             <ActivityContainer>
                 <AnimatedInfo style={{ opacity: cardOpacity }}>
                     <StatusContainer>
                         <StatusText>total gastos:</StatusText>
                         
-                        <StatusValue value='low'>R$ 865,50</StatusValue>
+                        <StatusValue value='low'>
+                            {Intl.NumberFormat('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL'
+                            }).format(low)}
+                        </StatusValue>
                     </StatusContainer>
 
                     <StatusContainer>
                         <StatusText>total ganhos:</StatusText>
 
-                        <StatusValue>R$ 3267,27</StatusValue>
+                        <StatusValue>
+                            {Intl.NumberFormat('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL'
+                            }).format(high)}
+                        </StatusValue>
                     </StatusContainer>
                 </AnimatedInfo>
 
@@ -161,12 +267,13 @@ export default function Home() {
                     style={{
                         marginBottom: 45
                     }}
-                    data={[1,2,3,4,5,6,7,8,9,10]}
-                    keyExtractor={item => item}
-                    renderItem={({ item }) => <Info />}
+                    data={history}
+                    keyExtractor={item => String(item.key)}
+                    renderItem={({ item }) => <Info data={item}/>}
                     />
                 </AnimatedCard>
             </ActivityContainer>
+            ) }
         </Container>
     )
 }

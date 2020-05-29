@@ -3,7 +3,8 @@ import {
     KeyboardAvoidingView,
     Keyboard ,
     TouchableWithoutFeedback,
-    Alert
+    Alert,
+    ActivityIndicator
 } from 'react-native'
 
 import firebase from '../../services/firebase'
@@ -31,6 +32,8 @@ export default function NewRegister() {
     const [value, setValue] = useState('')
     const [type, setType] = useState(null)
     const [comment, setComment] = useState('')
+    
+    const [isLoading, setIsLoading] = useState(false)
 
     const { user } = useContext(AuthContext)
 
@@ -62,6 +65,8 @@ export default function NewRegister() {
     }
 
     async function handleNewRegister() {
+        setIsLoading(true)
+
         const key = await firebase.database().ref('history').push().key
 
         await firebase.database().ref('history').child(user.uid).child(key).set({
@@ -88,6 +93,7 @@ export default function NewRegister() {
         setValue('')
         setType(null)
         setComment('')
+        setIsLoading(false)
 
         navigation.navigate('Home')
     }
@@ -110,6 +116,7 @@ export default function NewRegister() {
                                 <Input
                                 size={300}
                                 placeholder='informe o valor do registro'
+                                keyboardType='numeric'
                                 autoCorrect={false}
                                 value={value}
                                 onChangeText={text => setValue(text)}
@@ -134,7 +141,11 @@ export default function NewRegister() {
                             size={300}
                             onPress={handleSubmit}
                             >
-                                <ButtonText>REGISTRAR</ButtonText>
+                                { isLoading ? (
+                                    <ActivityIndicator size={32} color='#FAFAFA' /> 
+                                ) : (
+                                    <ButtonText>REGISTRAR</ButtonText>
+                                )}
                             </ButtonGreen>
                         </Actions>
                     </RegisterContainer>

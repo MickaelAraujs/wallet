@@ -18,7 +18,7 @@ import avatar from '../../assets/AVATAR.png'
 export default function Profile() {
     const navigation = useNavigation()
 
-    const { signOut, loading } = useContext(AuthContext)
+    const { signOut, loading, user } = useContext(AuthContext)
 
     return (
         <Container>
@@ -29,8 +29,8 @@ export default function Profile() {
                 source={avatar}
                 />
 
-                <Name>MICKAEL ARAUJO</Name>
-                <Email>mickaelaraujo@fakeemail.com</Email>
+                <Name>{user.name}</Name>
+                <Email>{user.email}</Email>
             </ProfileContainer>
 
             <Actions>
