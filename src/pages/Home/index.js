@@ -158,7 +158,9 @@ export default function Home() {
                     </MinimizeButton>
 
                     <FlatList
-                    style={{ width: '100%', height: '100%'}}
+                    style={{
+                        marginBottom: 45
+                    }}
                     data={[1,2,3,4,5,6,7,8,9,10]}
                     keyExtractor={item => item}
                     renderItem={({ item }) => <Info />}

@@ -1,7 +1,7 @@
 import styled from 'styled-components/native'
 
 export const InfoContainer = styled.View`
-    margin: 5px;
+   margin: 5px;
 `
 
 export const Row = styled.View`
