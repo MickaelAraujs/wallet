@@ -16,6 +16,8 @@ import {
 
 import DrawerToggler from '../../components/DrawerToggler'
 import Info from '../../components/Info'
+import DatePicker from '../../components/DatePicker'
+
 import { AuthContext } from '../../contexts/auth'
 import logo from '../../assets/Logo1.png'
 
@@ -32,6 +34,8 @@ export default function Home() {
     const [high, setHigh] = useState(0)
     const [low, setLow] = useState(0)
     const [isLoading, setIsLoading] = useState(true)
+    const [date, setDate] = useState(new Date())
+    const [showDatePicker, setShowDatePicker] = useState(false)
 
     const { user } = useContext(AuthContext)
 
@@ -43,7 +47,7 @@ export default function Home() {
 
             firebase.database().ref('history').child(user.uid)
                 .orderByChild('date')
-                .equalTo(format(new Date, 'dd/MM/yyyy'))
+                .equalTo(format(date, 'dd/MM/yyyy'))
                 .limitToLast(10)
                 .on('value', snapshot => {
                     setHistory([])
@@ -62,7 +66,7 @@ export default function Home() {
         }
 
         loadUserData()
-    }, [])
+    }, [date])
 
     useEffect(() => {
         async function loadTotalValues() {
@@ -162,6 +166,11 @@ export default function Home() {
         setIsMinimized(!isMinimized)
     }
 
+    function onDateChange(dateValue) {
+        setShowDatePicker(false)
+        setDate(dateValue)
+    }
+
     return (
         <Container>
             <DrawerToggler />
@@ -212,7 +221,9 @@ export default function Home() {
             ) }
 
             <GreenTextContainer>
-                <FilterDateButton>
+                <FilterDateButton
+                onPress={() => setShowDatePicker(true)}
+                >
                     <Icon name='calendar' size={32} color='#0BB24E' />
                 </FilterDateButton>
 
@@ -273,6 +284,13 @@ export default function Home() {
                     renderItem={({ item }) => <Info data={item}/>}
                     />
                 </AnimatedCard>
+
+                { showDatePicker && (
+                    <DatePicker
+                        onChange={onDateChange}
+                        date={date}
+                    />
+                ) }
             </ActivityContainer>
             ) }
         </Container>
