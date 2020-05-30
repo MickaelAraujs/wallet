@@ -41,27 +41,24 @@ export default function Home() {
                 setBalance(snapshot.val().balance)
             })
 
-            await firebase.database().ref('history').child(user.uid)
-            .orderByChild('date')
-            .equalTo(format(new Date(), 'dd/MM/yyyy'))
-            .limitToLast(10)
-            .on('value', snapshot => {
-                setHistory([])
-
-                snapshot.forEach(child => {
-                    const { comment, date, type, value } = child.val()
-
-                    const data = {
-                        key: child.key,
-                        comment,
-                        date,
-                        type,
-                        value
-                    }
-
-                    setHistory(oldArray => [...oldArray, data].reverse())
+            firebase.database().ref('history').child(user.uid)
+                .orderByChild('date')
+                .equalTo(format(new Date, 'dd/MM/yyyy'))
+                .limitToLast(10)
+                .on('value', snapshot => {
+                    setHistory([])
+                    snapshot.forEach(child => {
+                        const { comment, date, type, value } = child.val()
+                        const data = {
+                            key: child.key,
+                            comment,
+                            date,
+                            type,
+                            value
+                        }
+                        setHistory(oldArray => [...oldArray, data].reverse())
+                    })
                 })
-            })
         }
 
         loadUserData()
@@ -79,6 +76,8 @@ export default function Home() {
                     valueArray.push(child.val().value)
                 })
 
+                if (valueArray.length === 0) return
+
                 const total = valueArray.reduce((current, next) => current + next)
 
                 setLow(total)
@@ -93,6 +92,8 @@ export default function Home() {
                 snapshot.forEach(child => {
                     valueArray.push(child.val().value)
                 })
+
+                if (valueArray.length === 0) return
 
                 const total = valueArray.reduce((current, next) => current + next)
 
@@ -131,7 +132,7 @@ export default function Home() {
         if (!isMinimized) {
             Animated.parallel([
                 Animated.timing(height, {
-                    toValue: 30,
+                    toValue: 60,
                     duration: 900,
                     useNativeDriver: true
                 }),

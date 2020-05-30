@@ -111,6 +111,7 @@ export const ActivityCard = styled.View`
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     z-index: 9;
+    height: 100%;
     elevation: 15; 
 `
 
