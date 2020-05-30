@@ -4,7 +4,7 @@ export const SignInContainer = styled.View`
     margin-top: 30px;
     width: 100%;
     align-items: center;
-    border-bottom-width: 0.2px;
+    border-bottom-width: 0.3px;
     border-bottom-color: #0BB24E;
     padding-bottom: 20px;
 `
