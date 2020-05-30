@@ -281,7 +281,7 @@ export default function Home() {
                     }}
                     data={history}
                     keyExtractor={item => String(item.key)}
-                    renderItem={({ item }) => <Info data={item}/>}
+                    renderItem={({ item }) => <Info data={item} uid={user.uid}/>}
                     />
                 </AnimatedCard>
 
