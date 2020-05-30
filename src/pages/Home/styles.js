@@ -2,12 +2,13 @@ import styled from 'styled-components/native'
 import { getStatusBarHeight } from 'react-native-status-bar-height'
 
 export const Welcome = styled.View`
-    margin-top: ${45 + getStatusBarHeight()}px;
+    margin-top: ${15 + getStatusBarHeight()}px;
     padding: 10px;
     width: 100%;
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
 `
 
 export const TextContainer = styled.View`

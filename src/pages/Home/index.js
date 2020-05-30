@@ -136,7 +136,7 @@ export default function Home() {
         if (!isMinimized) {
             Animated.parallel([
                 Animated.timing(height, {
-                    toValue: 60,
+                    toValue: 0,
                     duration: 900,
                     useNativeDriver: true
                 }),
